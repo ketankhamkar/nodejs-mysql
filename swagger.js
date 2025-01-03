@@ -2,8 +2,8 @@ import swaggerAutogen from "swagger-autogen";
 
 const doc = {
   info: {
-    title: "My API",
-    description: "API documentation for my Node.js app",
+    title: "Foodie App API",
+    description: "API documentation for Foodie App",
   },
   host: "172.17.7.158:4000", // Change this to your host
   schemes: ["http"], // Use 'https' if applicable

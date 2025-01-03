@@ -1,8 +1,8 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "My API",
-    "description": "API documentation for my Node.js app",
+    "title": "Foodie App API",
+    "description": "API documentation for Foodie App",
     "version": "1.0.0"
   },
   "host": "172.17.7.158:4000",
