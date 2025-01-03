@@ -11,16 +11,3 @@ coverage/
 *.tsbuildinfo
 .idea/
 .vscode/
-*.sublime-project
-*.sublime-workspace
-*.swp
-*.swo
-*.bak
-*.tmp
-*.temp
-*.pid
-*.seed
-*.pid.lock
-*.seed.lock
-*.log.*
-*.tsbuildinfo.*
