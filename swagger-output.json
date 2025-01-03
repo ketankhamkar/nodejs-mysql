@@ -1,0 +1,134 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "My API",
+    "description": "API documentation for my Node.js app",
+    "version": "1.0.0"
+  },
+  "host": "172.17.7.158:4000",
+  "basePath": "/",
+  "schemes": [
+    "http"
+  ],
+  "securityDefinitions": {
+    "bearerAuth": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header",
+      "description": "JWT Authorization header using the Bearer scheme. Example: \"Bearer {token}\""
+    }
+  },
+  "paths": {
+    "/": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/users/register": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "example": "any"
+                },
+                "email": {
+                  "example": "any"
+                },
+                "password": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "example": "any"
+                },
+                "password": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/documents/register-docs": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "example": "any"
+                },
+                "url": {
+                  "example": "any"
+                },
+                "userId": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ]
+}
