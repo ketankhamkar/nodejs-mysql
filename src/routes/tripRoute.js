@@ -1,8 +1,12 @@
 import express from "express";
 const router = express.Router();
 
-router.post("create-trip", () => {
-  console.log("create trip");
+router.get("/", (req, res) => {
+  res.send("welcome to trips");
+});
+
+router.post("/create-trip", (req, res) => {
+  res.send("welcome to trips");
 });
 
 export default router;

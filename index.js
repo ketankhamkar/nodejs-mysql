@@ -14,7 +14,7 @@ app.get("/", (_req, res) => {
 app.use('/docs', serve, setup(swaggerOutput));
 app.use("/users", userRoute);
 app.use('/documents',documentRoute);
-app.use('/trips',(res,req)=>{console.log('trips')});
+app.use('/trips',tripRoute);
 
 app.listen(port, "0.0.0.0", () => {
   console.log(`Server is running on port ${port}`);
