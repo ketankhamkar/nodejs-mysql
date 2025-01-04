@@ -9,23 +9,23 @@ export const registerUsers = async (req, res) => {
     if (!name || !email || !password) {
       return res.status(400).json({ message: "All fields are required" });
     }
-    const result = new Promise((resolve, reject) => {
+    const result = await new Promise((resolve, reject) => {
       registerUser({ name, email, password }, (err, result) => {
         if (err) {
-          reject(err);
-          res.status(400).send(err);
-        } else {
-          resolve(result);
-          console.log({
-            message: "User registered successfully",
-            data: result,
-          });
-          res
-            .status(201)
-            .json({ message: "User registered successfully", data: result });
+          return reject(err);
         }
+        resolve(result);
       });
     });
+
+    console.log({
+      message: "User registered successfully",
+      data: result,
+    });
+
+    return res
+      .status(201)
+      .json({ message: "User registered successfully", data: result });
   } catch (error) {
     res.status(400).send(error);
   }
