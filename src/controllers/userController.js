@@ -66,3 +66,30 @@ export const loginUser = async (req, res) => {
     res.status(400).send(error);
   }
 };
+
+export const searchUser = async (req, res) => {
+  try {
+    const { name } = req.query;
+    if (!name || name.length < 2) {
+      return res
+        .status(400)
+        .json({ message: "Name must be at least 2 characters long." });
+    }
+    console.log("name==", name);
+    const sql = `select * from users where name like '%${name}%'`;
+    connection.query(sql, (err, result) => {
+      if (err) {
+        return res.status(400).json({ message: "User not found", error: err });
+      } else {
+        console.log("result==", result);
+        if (result.length === 0) {
+          return res.status(200).json({ message: "User not found", data: [] });
+        }
+        res.status(200).json({ message: "User found", data: result });
+      }
+    });
+    // res.status(200).json({ message: "User found" });
+  } catch (error) {
+    res.status(400).send(error);
+  }
+};
