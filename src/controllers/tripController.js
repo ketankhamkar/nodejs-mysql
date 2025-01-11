@@ -1,7 +1,13 @@
 import connection from "../../db.js";
+import validateUserToken from "../common/validateUserToken.js";
 
 export const createTrip = (req, res) => {
   const { tripName, fromTrip, toTrip, userId } = req.body;
+  const authHeader = req.headers["token"];
+  const validationResult = validateUserToken(authHeader);
+  if (!validationResult.valid) {
+    return res.status(401).json({ error: validationResult.error });
+  }
   console.log(req.body);
   if (!tripName || !fromTrip || !toTrip || !userId) {
     return res.status(400).json({ message: "All fields are required" });

@@ -2,6 +2,8 @@ import connection from "../../db.js";
 import { registerUser } from "../modules/userModule.js";
 import strings from "../strings.js";
 import jwt from "jsonwebtoken";
+import admin from "firebase-admin";
+import serviceAccount from "../../fileforfirebase.json" with {type:"json"};
 
 export const registerUsers = async (req, res) => {
   try {
@@ -89,6 +91,51 @@ export const searchUser = async (req, res) => {
       }
     });
     // res.status(200).json({ message: "User found" });
+  } catch (error) {
+    res.status(400).send(error);
+  }
+};
+
+export const sendNotify = async (req, res) => {
+  try {
+    admin.initializeApp({
+      credential: admin.credential.cert(serviceAccount),
+    });
+
+    const message = {
+      notification: {
+        title: "Hello! from new app",
+        body: "This is a Firebase notification.",
+        image: "https://www.w3schools.com/w3images/mountains.jpg",
+      },
+      data: {
+        key1: "value1",
+        key2: "value2",
+        customInfo: "Any custom details you want",
+      },
+      android: {
+        priority: "high",
+        notification: {
+          icon: "ic_launcher",
+          color: "#f45342",
+          sound: "default",
+          clickAction: "OPEN_ACTIVITY",
+        },
+      },
+      token:
+        "cwqea8A3Te6zEIshJDFzjY:APA91bH4s_hP8UEbMl-1aAVrOWrxFJ-JQyoV5ArmaUH4IiCIIItzHGAaC6hW2sDt9vriHaMypWcD5H1Qmdur7-xlZWIeCbkErM1K5YYBbp2Z3xsyVBYmK68",
+    };
+    admin
+      .messaging()
+      .send(message)
+      .then((response) => {
+        console.log("Message sent successfully:", response);
+        res.status(200).json({ message: "Notification sent successfully", response });
+      })
+      .catch((error) => {
+        console.error("Error sending notification:", error);
+        return res.status(400).json({ message: "Error sending notification", error });
+      });
   } catch (error) {
     res.status(400).send(error);
   }
