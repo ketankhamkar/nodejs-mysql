@@ -4,6 +4,7 @@ import strings from "../strings.js";
 import jwt from "jsonwebtoken";
 import admin from "firebase-admin";
 import serviceAccount from "../../fileforfirebase.json" with {type:"json"};
+import validateUserToken from "../common/validateUserToken.js";
 
 export const registerUsers = async (req, res) => {
   try {
@@ -35,11 +36,21 @@ export const registerUsers = async (req, res) => {
 
 export const loginUser = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password,fcmtoken } = req.body;
     if (!email || !password) {
       return res.status(400).json({ message: "All fields are required" });
     }
-    let sql = `SELECT * FROM users WHERE email='${email}' `;
+
+    if(fcmtoken){
+      let sql=`update users set fcmTocken=? where email=?`;
+      connection.query(sql,[`${fcmtoken}`,`${email}`],async(error,result)=>{
+        if(error){
+          return res.status(400).json({ message: "Invalid fcm_token",error:error });
+        }
+      })
+    }
+
+    let sql = `SELECT * FROM users WHERE email='${email}' and isdeleted=0 `;
     connection.query(sql, async (err, result) => {
       if (err) {
         res.status(400).send(err);
@@ -64,6 +75,7 @@ export const loginUser = async (req, res) => {
         });
       }
     });
+    
   } catch (error) {
     res.status(400).send(error);
   }
@@ -137,6 +149,30 @@ export const sendNotify = async (req, res) => {
         return res.status(400).json({ message: "Error sending notification", error });
       });
   } catch (error) {
+    res.status(400).send(error);
+  }
+};
+
+export const deleteUser = async (req, res) => {
+  try {
+    const {email}=req.body;
+    const authHeader = req.headers["token"];
+    const validationResult = validateUserToken(authHeader);
+    if (!validationResult.valid) {
+      return res.status(401).json({ error: validationResult.error });
+    }
+    if(!email){
+      return res.status(400).json({ message: "Email are required" });
+    }
+    let sql=`update users set isdeleted=1 where email='${email}'`;
+    connection.query(sql,async(error,result)=>{
+      if(error){
+        return res.status(400).json({ message: "Invalid email",error:error });
+      }
+      res.status(200).json({ message: "User deleted successfully", data:result });
+    })
+
+  }catch(error){
     res.status(400).send(error);
   }
 };
